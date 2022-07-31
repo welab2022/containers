@@ -1,0 +1,20 @@
+FROM golang:1.16.5 as development
+
+
+# Git is required for fetching the dependencies.
+RUN apk update && apk add --no-cache 'git=~2'
+
+
+# Add a work directory
+WORKDIR /app
+# Cache and install dependencies
+COPY go.mod go.sum ./
+RUN go mod download
+
+# Fetch dependencies.
+# Using go get.
+RUN go get -d -v
+
+# Copy app files
+COPY . .
+
